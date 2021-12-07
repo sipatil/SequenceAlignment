@@ -3,12 +3,13 @@ import java.util.Map;
 
 public abstract class SequenceAlignment {
     static final int DELTA;
-    static final Map<Character, Integer> BASE_TO_INDEX_MAP = new HashMap<>();
+    static final Map<Character, Integer> BASE_TO_INDEX_MAP;
     static final int[][] ALPHA;
 
     static {
         DELTA = 30;
 
+        BASE_TO_INDEX_MAP = new HashMap<>();
         BASE_TO_INDEX_MAP.put('A', 0);
         BASE_TO_INDEX_MAP.put('C', 1);
         BASE_TO_INDEX_MAP.put('G', 2);

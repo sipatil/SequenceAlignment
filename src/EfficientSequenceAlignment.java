@@ -7,7 +7,7 @@ public class EfficientSequenceAlignment extends SequenceAlignment  {
         return computeOptimalAlignment(0, x.length(), 0, y.length());
     }
 
-    private long computeOptimalAlignment(int x_start, int x_end,  int y_start, int y_end) {
+    private long computeOptimalAlignment(int x_start, int x_end, int y_start, int y_end) {
         int x_length = x_end - x_start;
         int y_length = y_end - y_start;
 

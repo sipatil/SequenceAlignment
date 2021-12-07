@@ -38,7 +38,7 @@ public class Main {
         float beforeUsedMem = RUNTIME.totalMemory() -  RUNTIME.freeMemory();
         long startTime  = System.nanoTime();
 
-        if (runEfficiently) LOGGER.log(Level.INFO, "Computing Optimal Sequence Alignment Efficiently");
+        if (runEfficiently) LOGGER.log(Level.INFO, "Computing Sequence Alignment Efficiently");
         SequenceAlignment sa = runEfficiently ? new EfficientSequenceAlignment(x, y) :  new BasicSequenceAlignment(x, y);
         long score = sa.computeOptimalAlignmentScore();
 
