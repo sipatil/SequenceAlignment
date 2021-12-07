@@ -1,90 +1,82 @@
-//import java.util.ArrayList;
-//import java.util.List;
-//import java.util.Map;
-//
-//public class EfficientSequenceAlignment {
-//
-//
-//    private static void getAlignmentForMemoryEfficientAlgo(ParseInputFromFile input) {
-//        String inputA = input.getInputA();
-//        String inputB = input.getInputB();
-//        Map<Integer, Integer> alignment = new LinkedHashMap<>();
-//        memoryEficientDnCAlignment(inputA, inputB, input, alignment);
-//        System.out.println(alignment.toString());
-//    }
-//
-//    private static void memoryEficientDnCAlignment(String inputA, String inputB, ParseInputFromFile input,
-//                                                   Map<Integer, Integer> alignment) {
-//        int sizeA = inputA.length();
-//        int sizeB = inputB.length();
-//        System.out.println("A--" + inputA);
-//        System.out.println("B--" + inputB);
-//
-//        if (sizeA > 1 && sizeB > 1) {
-//            if (sizeA <= 2 || sizeB <= 2) {
-//                getAlignmentForBasicAlgo(inputA, inputB, input, alignment);
-//            } else {
-//                List<Integer> alignmentMapFirstHalf = getOptimalIndexForB(inputA.substring(0, sizeA / 2 + 1), inputB,
-//                        input);
-//                List<Integer> alignmentMapSecondHalf = getOptimalIndexForB(
-//                        StringUtils.reverse(inputB.substring(0, sizeA / 2 + 1)), StringUtils.reverse(inputB), input);
-//
-//                List<Integer> finalalignmentMap = new ArrayList<Integer>();
-//                for (int i = 0 ; i < alignmentMapFirstHalf.size();i++) {
-//                    finalalignmentMap.add(alignmentMapFirstHalf.get(i)+alignmentMapSecondHalf.get(i));
-//                }
-//
-//                int maxAlignmentVal = 0;
-//                int maxAlignmentIndex = 0;
-//                for (int i = 0; i < sizeB; i++) {
-//                    int optVal = finalalignmentMap.get(i);
-//                    if (optVal > maxAlignmentVal) {
-//                        maxAlignmentVal = optVal;
-//                        maxAlignmentIndex = i;
-//                    }
-//                }
-//
-//                memoryEficientDnCAlignment(inputA.substring(0, sizeA / 2), inputB.substring(0, maxAlignmentIndex), input,
-//                        alignment);
-//                alignment.put(sizeA / 2, maxAlignmentIndex);
-//                memoryEficientDnCAlignment(inputA.substring(sizeA / 2 + 1, sizeA),
-//                        inputB.substring(maxAlignmentIndex + 1, sizeB), input, alignment);
-//                System.out.println(alignment.toString());
-//            }
-//        }
-//
-//    }
-//
-//    private static List<Integer> getOptimalIndexForB(String inputA, String inputB, ParseInputFromFile input) {
-//        List<List<Integer>> optimizerMatrix = new ArrayList<>();
-//        int sizeA = inputA.length();
-//        int sizeB = inputB.length();
-//
-//        for (int i = 0; i < 2; i++) {
-//            List<Integer> temp = getListOfNZeros(sizeB);
-//            temp.set(0, i * input.getDelta());
-//            optimizerMatrix.add(temp);
-//        }
-//
-//        for (int i = 0; i < sizeB; i++) {
-//            optimizerMatrix.get(0).set(i, i * input.getDelta());
-//        }
-//
-//        for (int j = 1; j < sizeB; j++) {
-//            for (int i = 1; i < sizeA; i++) {
-//                int min = Math.min(
-//                        input.getAlphaVals().get(String.valueOf(inputA.charAt(i))).get(String.valueOf(inputB.charAt(j)))
-//                                + optimizerMatrix.get(1).get(j),
-//                        Math.min(input.getDelta() + optimizerMatrix.get(0).get(j),
-//                                input.getDelta() + optimizerMatrix.get(1).get(j - 1)));
-//                optimizerMatrix.get(1).set(j, min);
-//                optimizerMatrix.set(0, optimizerMatrix.get(1));
-//            }
-//        }
-//
-//        System.out.println("A--" + inputA);
-//        System.out.println("B--" + inputB);
-//
-//        return optimizerMatrix.get(1);
-//    }
-//}
+public class EfficientSequenceAlignment extends SequenceAlignment  {
+    public EfficientSequenceAlignment(String x, String y) {
+        super(x, y);
+    }
+
+    public long computeOptimalAlignmentScore() {
+        return computeOptimalAlignment(0, x.length(), 0, y.length());
+    }
+
+    private long computeOptimalAlignment(int x_start, int x_end,  int y_start, int y_end) {
+        int x_length = x_end - x_start;
+        int y_length = y_end - y_start;
+
+        if (x_length <= 2 || y_length <= 2) {
+            BasicSequenceAlignment bsa  = new BasicSequenceAlignment(
+                    x.substring(x_start, x_end),
+                    y.substring(y_start, y_end));
+            long score = bsa.computeOptimalAlignmentScore();
+            this.aligned_x.append(bsa.getAligned_x());
+            this.aligned_y.append(bsa.getAligned_y());
+            return score;
+        }
+
+        int y_optimalPoint = y_start + findOptimalMidpoint(x.substring(x_start, x_end), y.substring(y_start, y_end));
+        int x_mid = x_start + (x_length % 2 == 0 ? x_length/2 : x_length/2 + 1);
+
+        long score = computeOptimalAlignment(x_start, x_mid, y_start, y_optimalPoint);
+        score += computeOptimalAlignment(x_mid, x_end, y_optimalPoint, y_end);
+        return score;
+    }
+
+    private int findOptimalMidpoint(String x, String y) {
+        int x_length = x.length();
+        int y_length = y.length();
+
+        int x_mid = x_length % 2 == 0 ? x_length/2 : x_length/2 + 1;
+        long[] scoresForX = computeAlignmentScores(x.substring(0, x_mid), y);
+        long[] scoresForXr = computeAlignmentScores(
+                new StringBuilder(x.substring(x_mid)).reverse().toString(),
+                new StringBuilder(y).reverse().toString());
+        x = null;
+        y = null;
+
+        int optimalPoint = 0;
+        long minScore = Long.MAX_VALUE;
+        for (int i = 0; i <= y_length; i++) {
+            long score = scoresForX[i] + scoresForXr[y_length - i];
+            if (minScore > score) {
+                minScore = score;
+                optimalPoint = i;
+            }
+        }
+        return optimalPoint;
+    }
+
+    private long[] computeAlignmentScores(String x, String y) {
+        int x_length = x.length();
+        int y_length = y.length();
+
+        long[] prev = new long[y_length + 1];
+        for (int i = 0; i <= y_length; i++) {
+            prev[i] = i * DELTA;
+        }
+
+        for (int i = 1; i <= x_length; i++) {
+            long[] current = new long[y_length + 1];
+            current[0] = i * DELTA;
+            for (int j = 1; j <= y_length; j++) {
+                int mismatchCost = getMismatchCost(x.charAt(i - 1), y.charAt(j - 1));
+                current[j] = Math.min(mismatchCost + prev[j - 1],
+                        Math.min(DELTA + prev[j], DELTA + current[j - 1]));
+            }
+            prev = current;
+        }
+        return prev;
+    }
+
+    private int getMismatchCost(char base1, char base2) {
+        return ALPHA[BASE_TO_INDEX_MAP.get(base1)][BASE_TO_INDEX_MAP.get(base2)];
+    }
+
+}

@@ -12,7 +12,7 @@ public class InputGenerator {
     private List<Integer> indexX;
     private List<Integer> indexY;
 
-    public InputGenerator(String filePath) {
+    public InputGenerator(String filePath) throws FileNotFoundException {
         indexX = new ArrayList<>();
         indexY = new ArrayList<>();
 
@@ -27,29 +27,24 @@ public class InputGenerator {
         return transform(y, indexY);
     }
 
-    private void parseInputFromFile(String filePath) {
-        try {
-            File myObj = new File(filePath);
-            Scanner myReader = new Scanner(myObj);
+    private void parseInputFromFile(String filePath) throws FileNotFoundException {
+            File file = new File(filePath);
+            Scanner fileReader = new Scanner(file);
 
             Pattern pattern = Pattern.compile("^\\d+$");
-            while (myReader.hasNextLine()) {
-                String data = myReader.nextLine();
+            while (fileReader.hasNextLine()) {
+                String data = fileReader.nextLine();
                 if (x == null) {
                     x = data;
                 } else if (y == null && pattern.matcher(data).matches()) {
                     indexX.add(Integer.parseInt(data));
                 } else if (y != null && pattern.matcher(data).matches()) {
                     indexY.add(Integer.parseInt(data));
-                } else {
+                } else if (y == null){
                     y = data;
                 }
             }
-            myReader.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred while reading the input file");
-            e.printStackTrace();
-        }
+            fileReader.close();
     }
 
     private String transform(String input, List<Integer> indices) {

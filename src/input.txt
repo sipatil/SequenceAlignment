@@ -1,10 +1,13 @@
-ACTG
+ACTTGAA
 3
 6
 1
 1
-TACG
+2
+1
+TGCACCT
 1
 2
 9
 2
+1
