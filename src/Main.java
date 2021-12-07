@@ -36,7 +36,6 @@ public class Main {
     private static void runSequenceAlignmentAlgo(String x, String y, FileWriter fileWriter)
             throws IOException {
         float beforeUsedMem = RUNTIME.totalMemory() -  RUNTIME.freeMemory();
-        System.out.println(beforeUsedMem);
         long startTime  = System.nanoTime();
 
         if (runEfficiently) LOGGER.log(Level.INFO, "Computing Optimal Sequence Alignment Efficiently");
@@ -45,7 +44,6 @@ public class Main {
 
         long endTime = System.nanoTime();
         float afterUsedMem = RUNTIME.totalMemory() - RUNTIME.freeMemory();
-        System.out.println(afterUsedMem);
 
         String alignment = sa.getOptimalAlignment();
         fileWriter.write( alignment + "\n");
@@ -73,13 +71,19 @@ public class Main {
     }
 
     private static FileWriter createOutputFile() throws IOException {
-        String timeStamp = new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss").format(System.currentTimeMillis());
-        String filename = "output-" + timeStamp + ".txt";
+        String directoryPath = "../output";
+        File directory = new File(directoryPath);
+        if (! directory.exists()){
+            directory.mkdir();
+        }
 
-        File file = new File(filename);
+        String filename = "output-" + new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss").format(System.currentTimeMillis()) + ".txt";
+        String filePath = directoryPath + "/" + filename;
+
+        File file = new File(filePath);
         file.createNewFile();
         LOGGER.log(Level.INFO, "Output file created: " + file.getName());
 
-        return new FileWriter(filename);
+        return new FileWriter(filePath);
     }
 }
