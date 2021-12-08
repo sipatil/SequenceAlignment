@@ -20,7 +20,8 @@ public class Main {
             InputGenerator inputGenerator = new InputGenerator(inputFilePath);
             String x = inputGenerator.getX();
             String y = inputGenerator.getY();
-            LOGGER.log(Level.INFO, "Problem size: " + x.length() + y.length());
+            int problemSize = x.length() + y.length();
+            LOGGER.log(Level.INFO, "Problem size: " + problemSize);
 
             FileWriter fileWriter = createOutputFile();
             runSequenceAlignmentAlgo(x, y, fileWriter);
