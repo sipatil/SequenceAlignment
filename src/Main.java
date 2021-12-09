@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.nio.file.Paths;
 
 public class Main {
 
@@ -66,24 +67,29 @@ public class Main {
                 LOGGER.log(Level.SEVERE, "Must provide argument \"-e\" to run the program memory efficiently.");
                 System.exit(0);
             }
-        } else {
+        } else if (args.length == 1) {
             inputFilePath = args[0];
+        } else {
+            LOGGER.log(Level.SEVERE, "Must provide correct arguments to run the program.");
+            System.exit(0);
         }
     }
 
     private static FileWriter createOutputFile() throws IOException {
-        String directoryPath = "../output";
+        String currentpath = System.getProperty("user.dir");
+        String fileSeparator = System.getProperty("file.separator");
+        String directoryPath = Paths.get(currentpath).getParent() + fileSeparator + "output";
         File directory = new File(directoryPath);
         if (! directory.exists()){
             directory.mkdir();
         }
 
         String filename = "output-" + new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss").format(System.currentTimeMillis()) + ".txt";
-        String filePath = directoryPath + "/" + filename;
+        String filePath = directoryPath + fileSeparator + filename;
 
         File file = new File(filePath);
         file.createNewFile();
-        LOGGER.log(Level.INFO, "Output file created: " + file.getName());
+        LOGGER.log(Level.INFO, "Output file created: " + filePath);
 
         return new FileWriter(filePath);
     }
