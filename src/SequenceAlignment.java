@@ -30,6 +30,8 @@ public abstract class SequenceAlignment {
 
     protected StringBuilder aligned_y;
 
+    protected long alignmentScore;
+
     SequenceAlignment(String x, String y) {
         this.x = x;
         this.y = y;
@@ -37,13 +39,13 @@ public abstract class SequenceAlignment {
         aligned_y = new StringBuilder();
     }
 
-    public abstract long computeOptimalAlignmentScore();
+    public abstract void runAlgorithm();
 
-    int getMismatchCost(char base1, char base2) {
-        return ALPHA[BASE_TO_INDEX_MAP.get(base1)][BASE_TO_INDEX_MAP.get(base2)];
+    public long getAlignmentScore() {
+        return alignmentScore;
     }
 
-    public String getOptimalAlignment() {
+    public String getAlignment() {
         return format(aligned_x).append("\n").append(format(aligned_y)).toString();
     }
 
@@ -53,5 +55,9 @@ public abstract class SequenceAlignment {
         StringBuilder op = new StringBuilder();
         return op.append(alignment.substring(0, 50)).append(" ")
                 .append(alignment.substring(alignment.length() - 50));
+    }
+
+    int getMismatchCost(char base1, char base2) {
+        return ALPHA[BASE_TO_INDEX_MAP.get(base1)][BASE_TO_INDEX_MAP.get(base2)];
     }
 }

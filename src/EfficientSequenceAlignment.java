@@ -3,11 +3,11 @@ public class EfficientSequenceAlignment extends SequenceAlignment  {
         super(x, y);
     }
 
-    public long computeOptimalAlignmentScore() {
-        return computeOptimalAlignment(0, x.length(), 0, y.length());
+    public void runAlgorithm() {
+        constructAlignment(0, x.length(), 0, y.length());
     }
 
-    private long computeOptimalAlignment(int x_start, int x_end, int y_start, int y_end) {
+    private void constructAlignment(int x_start, int x_end, int y_start, int y_end) {
         int x_length = x_end - x_start;
         int y_length = y_end - y_start;
 
@@ -15,18 +15,18 @@ public class EfficientSequenceAlignment extends SequenceAlignment  {
             BasicSequenceAlignment bsa  = new BasicSequenceAlignment(
                     x.substring(x_start, x_end),
                     y.substring(y_start, y_end));
-            long score = bsa.computeOptimalAlignmentScore();
+            bsa.runAlgorithm();
+            this.alignmentScore += bsa.alignmentScore;
             this.aligned_x.append(bsa.aligned_x);
             this.aligned_y.append(bsa.aligned_y);
-            return score;
+            return;
         }
 
         int y_optimalMid = findOptimalMid(x.substring(x_start, x_end), y.substring(y_start, y_end)) +  y_start;
         int x_mid = (x_length % 2 == 0 ? x_length/2 : x_length/2 + 1) + x_start;
 
-        long score = computeOptimalAlignment(x_start, x_mid, y_start, y_optimalMid);
-        score += computeOptimalAlignment(x_mid, x_end, y_optimalMid, y_end);
-        return score;
+        constructAlignment(x_start, x_mid, y_start, y_optimalMid);
+        constructAlignment(x_mid, x_end, y_optimalMid, y_end);
     }
 
     private int findOptimalMid(String x, String y) {

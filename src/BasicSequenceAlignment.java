@@ -6,7 +6,12 @@ public class BasicSequenceAlignment extends SequenceAlignment {
         this.optimizerMatrix = new long[x.length()+ 1][y.length()+ 1];
     }
 
-    public long computeOptimalAlignmentScore() {
+    public void runAlgorithm() {
+        computeAlignmentScore();
+        constructAlignment();
+    }
+
+    private void computeAlignmentScore() {
         int x_length = x.length();
         int y_length = y.length();
 
@@ -25,12 +30,10 @@ public class BasicSequenceAlignment extends SequenceAlignment {
             }
         }
 
-        constructOptimalAlignment();
-
-        return optimizerMatrix[optimizerMatrix.length - 1][optimizerMatrix[0].length - 1];
+        this.alignmentScore = optimizerMatrix[optimizerMatrix.length - 1][optimizerMatrix[0].length - 1];
     }
 
-    private void constructOptimalAlignment() {
+    private void constructAlignment() {
         int i = x.length();
         int j = y.length();
 

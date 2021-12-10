@@ -42,14 +42,13 @@ public class Main {
 
         if (runEfficiently) LOGGER.log(Level.INFO, "Computing Sequence Alignment Efficiently");
         SequenceAlignment sa = runEfficiently ? new EfficientSequenceAlignment(x, y) :  new BasicSequenceAlignment(x, y);
-        long score = sa.computeOptimalAlignmentScore();
+        sa.runAlgorithm();
 
         long endTime = System.nanoTime();
         float afterUsedMem = RUNTIME.totalMemory() - RUNTIME.freeMemory();
 
-        String alignment = sa.getOptimalAlignment();
-        fileWriter.write( alignment + "\n");
-        fileWriter.write( "Alignment score: " + score + "\n");
+        fileWriter.write( sa.getAlignment() + "\n");
+        fileWriter.write( "Alignment score: " + sa.getAlignmentScore() + "\n");
 
         float totalTime = (float) ((endTime - startTime) / Math.pow(10, 9));
         fileWriter.write(totalTime + " seconds\n");
