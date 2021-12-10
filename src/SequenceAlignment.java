@@ -39,14 +39,6 @@ public abstract class SequenceAlignment {
 
     public abstract long computeOptimalAlignmentScore();
 
-    StringBuilder getAligned_x() {
-        return aligned_x;
-    }
-
-    StringBuilder getAligned_y() {
-        return aligned_y;
-    }
-
     int getMismatchCost(char base1, char base2) {
         return ALPHA[BASE_TO_INDEX_MAP.get(base1)][BASE_TO_INDEX_MAP.get(base2)];
     }
