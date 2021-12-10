@@ -19,7 +19,7 @@ public class BasicSequenceAlignment extends SequenceAlignment {
 
         for (int i = 1; i <= x_length; i++) {
             for (int j = 1; j <= y_length; j++) {
-                optimizerMatrix[i][j] = Math.min(getMismatchCost(i, j) + optimizerMatrix[i - 1][j - 1],
+                optimizerMatrix[i][j] = Math.min(getMismatchCost(i - 1, j - 1) + optimizerMatrix[i - 1][j - 1],
                         Math.min(DELTA + optimizerMatrix[i - 1][j], DELTA + optimizerMatrix[i][j - 1]));
             }
         }
@@ -61,8 +61,8 @@ public class BasicSequenceAlignment extends SequenceAlignment {
     }
 
     private int getMismatchCost(int index_x, int index_y) {
-        char base1 = x.charAt(index_x - 1);
-        char base2 = y.charAt(index_y - 1);
+        char base1 = x.charAt(index_x);
+        char base2 = y.charAt(index_y);
         return ALPHA[BASE_TO_INDEX_MAP.get(base1)][BASE_TO_INDEX_MAP.get(base2)];
     }
 
