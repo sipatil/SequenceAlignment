@@ -19,7 +19,8 @@ public class BasicSequenceAlignment extends SequenceAlignment {
 
         for (int i = 1; i <= x_length; i++) {
             for (int j = 1; j <= y_length; j++) {
-                optimizerMatrix[i][j] = Math.min(getMismatchCost(i - 1, j - 1) + optimizerMatrix[i - 1][j - 1],
+                int mismatchCost = getMismatchCost(x.charAt(i - 1), y.charAt(j - 1));
+                optimizerMatrix[i][j] = Math.min(mismatchCost + optimizerMatrix[i - 1][j - 1],
                         Math.min(DELTA + optimizerMatrix[i - 1][j], DELTA + optimizerMatrix[i][j - 1]));
             }
         }
@@ -34,7 +35,8 @@ public class BasicSequenceAlignment extends SequenceAlignment {
         int j = y.length();
 
         while (i != 0 && j != 0) {
-            if (optimizerMatrix[i][j] == optimizerMatrix[i - 1][j - 1] + getMismatchCost(i - 1, j - 1)) {
+            int mismatchCost = getMismatchCost(x.charAt(i - 1), y.charAt(j - 1));
+            if (optimizerMatrix[i][j] == optimizerMatrix[i - 1][j - 1] + mismatchCost) {
                 aligned_x.append(x.charAt(--i));
                 aligned_y.append(y.charAt(--j));
             }  else if (optimizerMatrix[i][j] == optimizerMatrix[i - 1][j] + DELTA) {
@@ -59,11 +61,5 @@ public class BasicSequenceAlignment extends SequenceAlignment {
         aligned_x.reverse();
         aligned_y.reverse();
     }
-
-    private int getMismatchCost(int index_x, int index_y) {
-        char base1 = x.charAt(index_x);
-        char base2 = y.charAt(index_y);
-        return ALPHA[BASE_TO_INDEX_MAP.get(base1)][BASE_TO_INDEX_MAP.get(base2)];
-    }
-
+    
 }

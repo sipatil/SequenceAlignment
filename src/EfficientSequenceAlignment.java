@@ -75,8 +75,4 @@ public class EfficientSequenceAlignment extends SequenceAlignment  {
         return prev;
     }
 
-    private int getMismatchCost(char base1, char base2) {
-        return ALPHA[BASE_TO_INDEX_MAP.get(base1)][BASE_TO_INDEX_MAP.get(base2)];
-    }
-
 }

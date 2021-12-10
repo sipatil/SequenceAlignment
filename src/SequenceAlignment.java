@@ -47,6 +47,10 @@ public abstract class SequenceAlignment {
         return aligned_y;
     }
 
+    int getMismatchCost(char base1, char base2) {
+        return ALPHA[BASE_TO_INDEX_MAP.get(base1)][BASE_TO_INDEX_MAP.get(base2)];
+    }
+
     public String getOptimalAlignment() {
         return format(aligned_x).append("\n").append(format(aligned_y)).toString();
     }
