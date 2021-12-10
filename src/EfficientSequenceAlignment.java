@@ -16,8 +16,8 @@ public class EfficientSequenceAlignment extends SequenceAlignment  {
                     x.substring(x_start, x_end),
                     y.substring(y_start, y_end));
             long score = bsa.computeOptimalAlignmentScore();
-            this.aligned_x.append(bsa.getAligned_x());
-            this.aligned_y.append(bsa.getAligned_y());
+            this.aligned_x.append(bsa.aligned_x);
+            this.aligned_y.append(bsa.aligned_y);
             return score;
         }
 
