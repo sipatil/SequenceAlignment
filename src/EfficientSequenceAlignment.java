@@ -21,15 +21,15 @@ public class EfficientSequenceAlignment extends SequenceAlignment  {
             return score;
         }
 
-        int y_optimalPoint = y_start + findOptimalMidpoint(x.substring(x_start, x_end), y.substring(y_start, y_end));
-        int x_mid = x_start + (x_length % 2 == 0 ? x_length/2 : x_length/2 + 1);
+        int y_optimalMid = findOptimalMid(x.substring(x_start, x_end), y.substring(y_start, y_end)) +  y_start;
+        int x_mid = (x_length % 2 == 0 ? x_length/2 : x_length/2 + 1) + x_start;
 
-        long score = computeOptimalAlignment(x_start, x_mid, y_start, y_optimalPoint);
-        score += computeOptimalAlignment(x_mid, x_end, y_optimalPoint, y_end);
+        long score = computeOptimalAlignment(x_start, x_mid, y_start, y_optimalMid);
+        score += computeOptimalAlignment(x_mid, x_end, y_optimalMid, y_end);
         return score;
     }
 
-    private int findOptimalMidpoint(String x, String y) {
+    private int findOptimalMid(String x, String y) {
         int x_length = x.length();
         int y_length = y.length();
 
@@ -41,16 +41,16 @@ public class EfficientSequenceAlignment extends SequenceAlignment  {
         x = null;
         y = null;
 
-        int optimalPoint = 0;
+        int optimalMid = 0;
         long minScore = Long.MAX_VALUE;
         for (int i = 0; i <= y_length; i++) {
             long score = scoresForX[i] + scoresForXr[y_length - i];
             if (minScore > score) {
                 minScore = score;
-                optimalPoint = i;
+                optimalMid = i;
             }
         }
-        return optimalPoint;
+        return optimalMid;
     }
 
     private long[] computeAlignmentScores(String x, String y) {
