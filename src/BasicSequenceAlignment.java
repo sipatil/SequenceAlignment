@@ -34,7 +34,7 @@ public class BasicSequenceAlignment extends SequenceAlignment {
         int j = y.length();
 
         while (i != 0 && j != 0) {
-            if (optimizerMatrix[i][j] == optimizerMatrix[i - 1][j - 1] + getMismatchCost(i, j)) {
+            if (optimizerMatrix[i][j] == optimizerMatrix[i - 1][j - 1] + getMismatchCost(i - 1, j - 1)) {
                 aligned_x.append(x.charAt(--i));
                 aligned_y.append(y.charAt(--j));
             }  else if (optimizerMatrix[i][j] == optimizerMatrix[i - 1][j] + DELTA) {
