@@ -1,5 +1,0 @@
-AGAGAGAGAGAAGAGA______________GAG_________________ CTAGACTCTCTCTCTCTGACTCTCTCTCTC___________________T
-________________CTCTCTCTCTCTCT_AGCTCTCCTCTCCTCTCTC CTAGA____________GA___________GAGAGAGAAGAGAGAGAGA_
-Alignment score: 5760
-0.0157866 seconds
-1024.0156 KB
