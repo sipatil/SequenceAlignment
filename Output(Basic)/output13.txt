@@ -1,0 +1,5 @@
+______________AG________________________AG________ CTCTCTGA_CTCTCTCTCTCTAGACTCTCTCTCTCTGACTCTCTCTCTCT
+CTCTCTCTCTCTCTAGCTCTCCTCTCCTCTCTCTCTCTCTAGCTCTCCTC ______GAG____________AGA____________GA____________
+Alignment score: 5760
+0.0122762 seconds
+472.75 KB
